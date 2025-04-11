@@ -5,6 +5,7 @@
 ### Requirements
 - Python 3.x
 - Poetry (for dependency management)
+- posgresql 
 
 ### Clone the Repository
 ```bash
@@ -22,4 +23,8 @@ Create a new branch
 ```bash
 git checkout -b feature/feature-name
 ```
-
+Make changes then create a pull request
+make sure you add any additional dependencies installed using 
+```bash
+poetry add <package>
+```
