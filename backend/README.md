@@ -10,4 +10,16 @@
 ```bash
 git clone https://github.com/goldenjeffempire/ALX-Hackthon-.git
 cd ALX-Hackthon
+```
+
+### Install dependencies
+``` bash
+poetry install
+```
+
+### Contribution
+Create a new branch
+```bash
+git checkout -b feature/feature-name
+```
 
