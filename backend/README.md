@@ -1,28 +1,30 @@
-# Atlas backend
+# Atlas Backend
 
-# How to set up and contribute
+## How to Set Up and Contribute
 
-requirements
-  python3.x
-  poetry (for dependency management)
+### Requirements
+- Python 3.x
+- Poetry (for dependency management)
+- posgresql 
 
+### Clone the Repository
+```bash
+git clone https://github.com/goldenjeffempire/ALX-Hackthon-.git
+cd ALX-Hackthon
+```
 
-clone the repository
-  git clone https://github.com/goldenjeffempire/ALX-Hackthon-.git
-  cd ALX-Hackthon
+### Install dependencies
+``` bash
+poetry install
+```
 
-install poetry (if not already installed)
-  pip install poetry
-
-install dependencies
-  poetry install
-
-# How to contribute
-
-create a new branch 
-  git checkout -b feature/feature-name
-
-if you add new dependencies don't forget to add them using
-  poetry add <package-name>
-
-
+### Contribution
+Create a new branch
+```bash
+git checkout -b feature/feature-name
+```
+Make changes then create a pull request
+make sure you add any additional dependencies installed using 
+```bash
+poetry add <package>
+```
