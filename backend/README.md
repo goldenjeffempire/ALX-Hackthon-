@@ -28,3 +28,8 @@ make sure you add any additional dependencies installed using
 ```bash
 poetry add <package>
 ```
+
+### Run tests
+Run tests with 
+```bash
+poetry run python manage.py test tests.test_models```
