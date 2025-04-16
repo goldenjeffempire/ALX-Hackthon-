@@ -42,3 +42,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+class Location(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.TextField()
+
+    def __str__(self):
+        return self.name

@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import FloorPlan, Workspace
 
-# Register your models here.
+admin.site.register(FloorPlan)
+admin.site.register(Workspace)
