@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'workspace_booking',
     'workspace_management',
     'notifications',
+    'django_celery_beat',
+    'django_celery_results',
     'reporting_analytics',
     'maintenance',
     'collaboration',
@@ -148,3 +150,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+# Celery configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'django-db'
