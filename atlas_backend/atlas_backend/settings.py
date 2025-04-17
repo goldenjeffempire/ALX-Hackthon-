@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'localization',
     'search_filtering',
     'customization',
+    'django_otp',
+    'two_factor',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_otp.middleware.OTPMiddleware',
 ]
 
 ROOT_URLCONF = 'atlas_backend.urls'
@@ -154,3 +157,8 @@ REST_FRAMEWORK = {
 # Celery configuration
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'django-db'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'two_factor.auth_backend.AuthenticationBackend',
+)

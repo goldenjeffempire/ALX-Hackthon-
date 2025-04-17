@@ -38,4 +38,5 @@ urlpatterns = [
     path('api/customization/', include('customization.urls')),
     path('api/maintenance/', include('maintenance.urls')),
     path('api/reports/', include('reporting_analytics.urls')),
+    path('account/', include('two_factor.urls', 'two_factor')),
 ]
