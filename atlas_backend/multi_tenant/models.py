@@ -4,7 +4,7 @@ from django_tenants.models import TenantMixin
 
 class Tenant(TenantMixin):
     name = models.CharField(max_length=255)
-    domain_url = models.CharField(max_length=255, unique=True)
+    domain_url = models.CharField(max_length=255)
     logo = models.ImageField(upload_to='tenant_logos/', null=True, blank=True)
     colors = models.JSONField(default=dict)  # To store tenant-specific branding (e.g., primary color)
 

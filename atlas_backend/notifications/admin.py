@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Notification, UserNotificationSettings, NotificationPreference
+from .models import Notification, NotificationSettings, NotificationPreference
 
 # Registering Notification model with custom admin interface
 @admin.register(Notification)
@@ -9,8 +9,8 @@ class NotificationAdmin(admin.ModelAdmin):
     list_filter = ('is_read', 'notification_type')
 
 # Registering UserNotificationSettings model with custom admin interface
-@admin.register(UserNotificationSettings)
-class UserNotificationSettingsAdmin(admin.ModelAdmin):
+@admin.register(NotificationSettings)
+class NotificationSettingsAdmin(admin.ModelAdmin):
     list_display = ('user', 'email_notifications', 'sms_notifications', 'push_notifications')
 
 # Registering NotificationPreference model
