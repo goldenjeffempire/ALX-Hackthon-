@@ -4,6 +4,7 @@ from .serializers import AuditLogSerializer
 from .permissions import IsAdminOrReadOnly
 
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = AuditLog.objects.all()
     serializer_class = AuditLogSerializer
     permission_classes = [IsAdminOrReadOnly]
 

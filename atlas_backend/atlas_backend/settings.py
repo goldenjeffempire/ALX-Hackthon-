@@ -33,21 +33,36 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
+# ────────────────────────────────
+# 🏢 Django-Tenants Configuration
+# ────────────────────────────────
+
+SHARED_APPS = (
+    'django_tenants',  # must be first
+    'multi_tenant',    # your custom tenant model app
     'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_celery_beat',
+    'django_celery_results',
+    'localization',
+)
+
+TENANT_APPS = (
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'user_management',
     'workspace_booking',
     'workspace_management',
     'notifications',
-    'django_celery_beat',
-    'django_celery_results',
     'reporting_analytics',
     'maintenance',
     'collaboration',
@@ -55,25 +70,28 @@ INSTALLED_APPS = [
     'security',
     'mobile_accessibility',
     'integrations',
-    'multi_tenant',
-    'localization',
     'search_filtering',
     'customization',
     'django_otp',
     'two_factor',
-    'django_tenants',
-]
+)
+
+# Combine SHARED and TENANT apps without duplicates
+INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
+
+TENANT_MODEL = 'multi_tenant.Client'
+TENANT_DOMAIN_MODEL = 'multi_tenant.Domain'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_tenants.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_otp.middleware.OTPMiddleware',
-    'django_tenants.middleware.TenantMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
 
@@ -209,4 +227,8 @@ TWILIO_AUTH_TOKEN = 'your_twilio_auth_token'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'two_factor.auth_backend.AuthenticationBackend',
+)
+
+DATABASE_ROUTERS = (
+    'django_tenants.routers.TenantSyncRouter',
 )
