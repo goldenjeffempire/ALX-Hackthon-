@@ -51,7 +51,7 @@ chardet==5.2.0
 reportlab==4.3.1
 pandas==2.2.3
 
-# 2FA and form/phone utilities
+# 2FA, Forms, and Phone Utilities
 django-formtools==2.5.1
 django-phonenumber-field==8.1.0
 django-two-factor-auth==1.17.0
@@ -59,3 +59,17 @@ django-otp==1.6.0
 pypng==0.20220715.0
 qrcode==7.4.2
 typing-extensions==4.13.2
+
+# Third-party Integrations
+python-dotenv==1.1.0
+slack-sdk==3.35.0
+python-trello==0.0.4
+asana==3.2.2
+
+# Tenants support
+django-tenants==3.7.0
+
+# Notifications
+celery==5.5.1
+django-celery-email==3.0.0
+twilio==9.5.2
