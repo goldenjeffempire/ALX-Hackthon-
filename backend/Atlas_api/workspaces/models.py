@@ -76,6 +76,32 @@ class Workspace(models.Model):
         """Format opening hours for display"""
         return f"{self.opening_time.strftime('%I:%M %p')} - {self.closing_time.strftime('%I:%M %p')}"
 
+    def is_available_during(self, start_dt, end_dt):
+        """Check if workspace is available during specified datetime range"""
+        # Convert datetimes to times for daily schedule check
+        start_time = start_dt.time()
+        end_time = end_dt.time()
+    
+        # Check if within operating hours (handles overnight cases)
+        if self.opening_time < self.closing_time:
+            # Normal hours (e.g., 9AM-5PM)
+            if not (self.opening_time <= start_time <= end_time <= self.closing_time):
+                return False
+        else:
+            # Overnight hours (e.g., 10PM-6AM)
+            if not ((start_time >= self.opening_time or start_time <= self.closing_time) and
+                (end_time >= self.opening_time or end_time <= self.closing_time)):
+                return False
+    
+        # Check for conflicting bookings
+        conflicting_bookings = self.bookings.filter(
+            start_time__lt=end_dt,
+            end_time__gt=start_dt,
+            status__in=[Booking.Status.CONFIRMED, Booking.Status.PENDING]
+        ).exists()
+    
+        return not conflicting_bookings
+
     def __str__(self):
         return f"{self.name} - {self.location}"
 
