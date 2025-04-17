@@ -64,6 +64,9 @@ class Workspace(models.Model):
         super().save(*args, **kwargs)
 
     def is_open_now(self):
+        """This implementation utilizes datetime.time as I do not
+            expect people to want to work past 6pm and it is easier 
+            to test please update to datetime.datetime if I happen to be wrong"""
         from django.utils import timezone
 
         now = timezone.now().time()
