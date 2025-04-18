@@ -2,7 +2,7 @@
 from celery import shared_task
 from django.core.mail import send_mail
 from twilio.rest import Client
-from .models import Notification, UserNotificationSettings
+from .models import Notification, NotificationSettings
 from django.conf import settings
 
 @shared_task

@@ -35,8 +35,9 @@ urlpatterns = [
     path('api/collaboration/', include('collaboration.urls')),
     path('api/localization/', include('localization.urls')),
     path('api/notifications/', include('notifications.urls')),
-    path('api/customization/', include('customization.urls')),
+    #path('api/customization/', include('customization.urls')),
     path('api/maintenance/', include('maintenance.urls')),
     path('api/reports/', include('reporting_analytics.urls')),
-    path('account/', include('two_factor.urls', 'two_factor')),
+    path('account/', include('two_factor_auth.urls', namespace='two_factor_auth')),
+
 ]
