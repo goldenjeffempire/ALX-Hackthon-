@@ -1,18 +1,15 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
-class Department(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.name
-
+# Custom User Manager
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
+        """
+        Creates and returns a regular user with an email and password.
+        """
         if not email:
-            raise ValueError(_('Email is required'))
+            raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -20,32 +17,49 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
+        """
+        Creates and returns a superuser with an email and password.
+        """
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
         return self.create_user(email, password, **extra_fields)
 
-class User(AbstractUser):
-    username = None  # Remove username field
-    email = models.EmailField(unique=True)
-    full_name = models.CharField(max_length=255)
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
-    role = models.CharField(max_length=50, choices=[
-        ("admin", "Admin"),
-        ("manager", "Manager"),
-        ("employee", "Employee"),
-    ], default="employee")
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+# Custom User Model
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
         return self.email
 
+
+# Location Model
 class Location(models.Model):
     name = models.CharField(max_length=255)
     address = models.TextField()
 
     def __str__(self):
         return self.name
+
+
+# User Profile Model
+class UserProfile(models.Model):
+    user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='profile')
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    location = models.ForeignKey('Location', on_delete=models.SET_NULL, null=True, blank=True)
+    bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+
+    def __str__(self):
+        return f'Profile of {self.user.email}'

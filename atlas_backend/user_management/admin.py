@@ -1,18 +1,15 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Department
+from .models import User, UserProfile, Location
 
-class UserAdmin(BaseUserAdmin):
-    model = User
-    list_display = ('email', 'full_name', 'role', 'department', 'is_active')
-    list_filter = ('role', 'department')
-    fieldsets = (
-        (None, {'fields': ('email', 'password', 'full_name', 'role', 'department')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
-    )
-    search_fields = ('email', 'full_name')
-    ordering = ('email',)
-    filter_horizontal = ()
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = 'Profile'
 
-admin.site.register(User, UserAdmin)
-admin.site.register(Department)
+class CustomUserAdmin(admin.ModelAdmin):
+    inlines = (UserProfileInline,)
+    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_active', 'date_joined')
+    search_fields = ('email', 'first_name', 'last_name')
+
+admin.site.register(User, CustomUserAdmin)
+admin.site.register(Location)
