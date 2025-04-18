@@ -14,9 +14,11 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -33,60 +35,47 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-# ────────────────────────────────
-# 🏢 Django-Tenants Configuration
-# ────────────────────────────────
-
-SHARED_APPS = (
-    'django_tenants',  # must be first
-    'multi_tenant',    # your custom tenant model app
-    'django.contrib.contenttypes',
-    'django.contrib.auth',
+INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'django_celery_beat',
-    'django_celery_results',
-    'localization',
-)
-
-TENANT_APPS = (
-    'django.contrib.contenttypes',
     'django.contrib.auth',
+    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user_management',
-    'workspace_booking',
-    'workspace_management',
-    'notifications',
-    'reporting_analytics',
-    'maintenance',
-    'collaboration',
-    'feedback',
-    'security',
-    'mobile_accessibility',
-    'integrations',
-    'search_filtering',
-    'customization',
-    'django_otp',
-    'two_factor',
-    'two_factor_auth',
-)
 
-# Combine SHARED and TENANT apps without duplicates
-INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
+    # 🔹 Third-party apps
+    'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
+    'corsheaders',
+    'django_countries',
+    'phonenumber_field',
+    'drf_yasg',
+    # 🔹 Core feature modules (custom apps)
+    'user_management',            # User auth, MFA, RBAC
+    'workspace_booking',          # Book rooms, availability
+    'workspace_management',       # Floor plans, configs
+    'notifications',              # Email/SMS/push
+    'reporting_analytics',        # Dashboards, analytics
+    'payment_billing',            # Stripe, PayPal
+    'maintenance',                # Maintenance tickets
+    'collaboration',              # Meetings, integrations
+    'feedback',                   # Feedback, ratings
+    'security',                   # 2FA, audit logs
+    'mobile_accessibility',       # PWA, mobile support
+    'integrations',               # Slack, Trello, Google
+    'multi_tenant',               # Tenant control, branding
+    'localization',               # i18n and timezone
+    'search_filtering',           # Smart filtering
+    'customization',              # Dashboards, branding
 
-TENANT_MODEL = 'multi_tenant.Client'
-TENANT_DOMAIN_MODEL = 'multi_tenant.Domain'
+    # 🔹 Utilities or shared
+    'common',                     # Shared models/utilities (if any)
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django_tenants.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -119,10 +108,15 @@ WSGI_APPLICATION = 'atlas_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# PostgreSQL + django-tenants configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'NAME': 'atlas_db',
+        'USER': 'atlas_user',
+        'PASSWORD': 'strongpassword',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -182,8 +176,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user_management.User'
 
-TENANT_MODEL = 'multi_tenant.Client'
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -230,6 +222,3 @@ AUTHENTICATION_BACKENDS = (
     'two_factor.auth_backend.AuthenticationBackend',
 )
 
-DATABASE_ROUTERS = (
-    'django_tenants.routers.TenantSyncRouter',
-)
