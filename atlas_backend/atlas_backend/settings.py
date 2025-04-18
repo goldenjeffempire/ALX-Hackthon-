@@ -74,6 +74,7 @@ TENANT_APPS = (
     'customization',
     'django_otp',
     'two_factor',
+    'two_factor_auth',
 )
 
 # Combine SHARED and TENANT apps without duplicates

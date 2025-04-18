@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 class NotificationSettings(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notification_pref')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notification_settings')
     email_notifications = models.BooleanField(default=True)
     sms_notifications = models.BooleanField(default=False)
     push_notifications = models.BooleanField(default=True)
@@ -31,7 +31,7 @@ class Notification(models.Model):
 
 # Notification preference model that handles the user's notification choices for email, SMS, and push
 class NotificationPreference(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notification_pref')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notification_preferences')
     email_notifications = models.BooleanField(default=True)
     sms_notifications = models.BooleanField(default=False)
     push_notifications = models.BooleanField(default=True)
