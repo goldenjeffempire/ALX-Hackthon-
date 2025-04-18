@@ -61,20 +61,17 @@ INSTALLED_APPS = [
     'workspace_management',       # Floor plans, configs
     'notifications',              # Email/SMS/push
     'reporting_analytics',        # Dashboards, analytics
-    'payment_billing',            # Stripe, PayPal
+    #'payment_billing',            # Stripe, PayPal
     'maintenance',                # Maintenance tickets
     'collaboration',              # Meetings, integrations
     'feedback',                   # Feedback, ratings
     'security',                   # 2FA, audit logs
-    'mobile_accessibility',       # PWA, mobile support
+    #'mobile_accessibility',       # PWA, mobile support
     'integrations',               # Slack, Trello, Google
     'multi_tenant',               # Tenant control, branding
     'localization',               # i18n and timezone
-    'search_filtering',           # Smart filtering
-    'customization',              # Dashboards, branding
-
-    # 🔹 Utilities or shared
-    'common',                     # Shared models/utilities (if any)
+    #'search_filtering',           # Smart filtering
+    #'customization',              # Dashboards, branding
 ]
 
 
@@ -115,7 +112,7 @@ TEMPLATES = [
 # PostgreSQL + django-tenants configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django_tenants.postgresql_backend',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': env('DB_NAME'),
         'USER': env('DB_USER'),
         'PASSWORD': env('DB_PASSWORD'),
@@ -180,6 +177,22 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]
+}
+
+# SimpleJWT Settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': 'your-secret-key',  # make sure to change this in production
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
 }
 
 # Celery configuration
