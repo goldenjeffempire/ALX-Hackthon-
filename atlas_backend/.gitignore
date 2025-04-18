@@ -1,0 +1,66 @@
+# Python-related
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+
+# Django-related
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+*.sqlite3
+*.log
+
+# .env files
+.env
+.env.local
+.env.*.local
+
+# Static files (ignore if not committed)
+staticfiles/
+
+# Media files (if not committed)
+media/
+
+# PyCharm & IDEs
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# VSCode settings
+.vscode/
+
+# Coverage reports
+.coverage
+*.coveragerc
+nosetests.xml
+coverage.xml
+*.hdf5
+*.coverage
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Celery & Redis
+celerybeat-schedule
+celeryd.pid
+*.pid
+
+# Docker-related
+*.docker
+docker-compose.override.yml
+
+# Node modules (for frontend if applicable)
+node_modules/
+
+# Typescript cache files
+*.tsbuildinfo
+
+# .env configurations for production or local dev
+.env.*
