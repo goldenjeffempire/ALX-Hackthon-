@@ -63,4 +63,4 @@ node_modules/
 *.tsbuildinfo
 
 # .env configurations for production or local dev
-.env.*
+.env
