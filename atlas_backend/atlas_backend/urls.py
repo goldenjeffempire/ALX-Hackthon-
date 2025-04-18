@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from two_factor.urls import urlpatterns as tf_urls
 
 
 urlpatterns = [
@@ -38,6 +39,5 @@ urlpatterns = [
     #path('api/customization/', include('customization.urls')),
     path('api/maintenance/', include('maintenance.urls')),
     path('api/reports/', include('reporting_analytics.urls')),
-    path('account/', include('two_factor_auth.urls', namespace='two_factor_auth')),
-
+    path('account/', include(tf_urls)),
 ]

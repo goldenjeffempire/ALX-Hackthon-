@@ -55,7 +55,11 @@ INSTALLED_APPS = [
     'django_countries',
     'phonenumber_field',
     'drf_yasg',
-    # 🔹 Core feature modules (custom apps)
+    'django_otp',
+    'django_otp.plugins.otp_totp',
+    'two_factor',
+    'two_factor.plugins.phonenumber',
+    'two_factor.plugins.email',
     'user_management',            # User auth, MFA, RBAC
     'workspace_booking',          # Book rooms, availability
     'workspace_management',       # Floor plans, configs
@@ -227,6 +231,11 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 TWILIO_PHONE_NUMBER = env('TWILIO_PHONE_NUMBER')
 TWILIO_ACCOUNT_SID = env('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = env('TWILIO_AUTH_TOKEN')
+
+TWO_FACTOR_CALL_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
+TWO_FACTOR_SMS_GATEWAY = 'two_factor.gateways.twilio.gateway.Twilio'
+
+LOGIN_URL = 'two_factor:login'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
