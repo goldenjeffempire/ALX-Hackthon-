@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'two_factor',
     'two_factor.plugins.phonenumber',
     'two_factor.plugins.email',
+    'main',
     'user_management',            # User auth, MFA, RBAC
     'workspace_booking',          # Book rooms, availability
     'workspace_management',       # Floor plans, configs
@@ -89,6 +90,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_otp.middleware.OTPMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'atlas_backend.urls'
