@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
@@ -35,17 +36,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class UserType(models.TextChoices):
         ADMIN = "ADMIN", _("Admin")  # Can create bookings for team
-        FREELANCER = "FREELANCER", _("Freelancer")  # Solo booker
-        LEARNER = "LEARNER", _("Learner")  # Student booker
+        GENERAL = "GENERAL", _("General")  # Solo booker
+        EMPLOYEE = "EMPLOYEE", _("Employee")
         OWNER = "OWNER", _("Owner")  # Workspace owner
 
     email = models.EmailField("email address", unique=True)
     phone = models.CharField(max_length=20, blank=True)  # Only essential contact field
     user_type = models.CharField(
-        max_length=20, choices=UserType.choices, default=UserType.FREELANCER
+        max_length=20, choices=UserType.choices, default=UserType.GENERAL
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

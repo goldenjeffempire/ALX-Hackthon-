@@ -13,11 +13,11 @@ class UserModelTests(TestCase):
     def test_create_user(self):
         """Test creating a basic user works"""
         user = User.objects.create_user(
-            email="test@example.com", password="testpass123", user_type="FREELANCER"
+            email="test@example.com", password="testpass123", user_type="GENERAL"
         )
         self.assertEqual(user.email, "test@example.com")
         self.assertTrue(user.check_password("testpass123"))
-        self.assertEqual(user.user_type, "FREELANCER")
+        self.assertEqual(user.user_type, "GENERAL")
         self.assertFalse(user.is_staff)
         self.assertTrue(user.is_active)
 
@@ -36,15 +36,15 @@ class UserModelTests(TestCase):
         """Test that email is required"""
         with self.assertRaises(ValueError):
             User.objects.create_user(
-                email="", password="testpass123", user_type="FREELANCER"
+                email="", password="testpass123", user_type="GENERAL"
             )
 
     def test_user_type_default(self):
-        """Test that user_type defaults to FREELANCER"""
+        """Test that user_type defaults to GENERAL"""
         user = User.objects.create_user(
             email="default@example.com", password="testpass123"
         )
-        self.assertEqual(user.user_type, "FREELANCER")
+        self.assertEqual(user.user_type, "GENERAL")
 
     def test_user_type_validation(self):
         """Test that invalid user types are rejected"""
@@ -62,7 +62,7 @@ class UserModelTests(TestCase):
             email="owner@example.com", password="testpass123", user_type="OWNER"
         )
         non_owner = User.objects.create_user(
-            email="regular@example.com", password="testpass123", user_type="FREELANCER"
+            email="regular@example.com", password="testpass123", user_type="GENERAL"
         )
         self.assertTrue(owner.is_owner())
         self.assertFalse(non_owner.is_owner())
@@ -73,7 +73,7 @@ class UserModelTests(TestCase):
             email="admin@example.com", password="testpass123", user_type="ADMIN"
         )
         non_admin = User.objects.create_user(
-            email="regular@example.com", password="testpass123", user_type="FREELANCER"
+            email="regular@example.com", password="testpass123", user_type="GENERAL"
         )
         self.assertTrue(admin.is_admin())
         self.assertFalse(non_admin.is_admin())
