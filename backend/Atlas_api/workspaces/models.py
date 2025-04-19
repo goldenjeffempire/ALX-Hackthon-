@@ -97,7 +97,7 @@ class Workspace(models.Model):
         conflicting_bookings = self.bookings.filter(
             start_time__lt=end_dt,
             end_time__gt=start_dt,
-            status__in=[Booking.Status.CONFIRMED, Booking.Status.PENDING]
+            status__in=['Booking.Status.CONFIRMED', 'Booking.Status.PENDING']
         ).exists()
     
         return not conflicting_bookings
