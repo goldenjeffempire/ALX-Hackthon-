@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from two_factor.urls import urlpatterns as tf_urls
 
@@ -24,8 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/', include('main.urls')),
-    path('api/user/', include('user_management.urls')),
+    path('api/auth/', include('user_management.urls')),
     path('api/bookings/', include('workspace_booking.urls')),
     path('api/rooms/', include('workspace_management.urls')),
     path('api/feedback/', include('feedback.urls')),
@@ -42,3 +43,5 @@ urlpatterns = [
     path('api/reports/', include('reporting_analytics.urls')),
     path('account/', include(tf_urls)),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

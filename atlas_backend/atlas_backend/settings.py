@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'two_factor',
     'two_factor.plugins.phonenumber',
     'two_factor.plugins.email',
-    'main',
     'user_management',            # User auth, MFA, RBAC
     'workspace_booking',          # Book rooms, availability
     'workspace_management',       # Floor plans, configs
