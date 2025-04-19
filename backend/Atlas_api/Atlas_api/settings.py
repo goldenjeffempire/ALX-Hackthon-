@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "users",
     "bookings",
     "workspaces",
+    "notifications",
     "rest_framework",
     "rest_framework_simplejwt"
 ]
