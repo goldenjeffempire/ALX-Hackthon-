@@ -1,42 +1,35 @@
 from rest_framework import serializers
-from .models import User, UserProfile, Location
-from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
-class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=8)
+User = get_user_model()
+
+class UserSerializer(serializers.ModelSerializer):
+    confirm_password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'password')
+        fields = ['email', 'first_name', 'last_name', 'password', 'confirm_password', 'role']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+    def validate(self, data):
+        if data['password'] != data['confirm_password']:
+            raise ValidationError("Passwords do not match")
+        return data
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        validated_data.pop('confirm_password')
+        user = User.objects.create_user(
+            email=validated_data['email'],
+            password=validated_data['password'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name']
+        )
+        return user
 
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
-
-    def validate(self, data):
-        user = authenticate(email=data['email'], password=data['password'])
-        if user is None:
-            raise serializers.ValidationError("Invalid credentials")
-        if not user.is_active:
-            raise serializers.ValidationError("User is inactive")
-        data['user'] = user
-        return data
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'email', 'first_name', 'last_name')
-
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    location_name = serializers.CharField(source='location.name', read_only=True)
-
-    class Meta:
-        model = UserProfile
-        fields = ('user', 'phone_number', 'bio', 'profile_picture', 'location', 'location_name')
+    password = serializers.CharField()

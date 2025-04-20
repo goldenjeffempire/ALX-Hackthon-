@@ -47,11 +47,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # 🔹 Third-party apps
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'allauth',
+    'allauth.account',
+    #'allauth.socialaccount',
+    #'allauth.socialaccount.providers.google',
+    #'allauth.socialaccount.providers.linkedin',
     'django_countries',
     'phonenumber_field',
     'drf_yasg',
@@ -89,6 +93,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_otp.middleware.OTPMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
 
@@ -244,5 +249,6 @@ LOGIN_URL = 'two_factor:login'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'two_factor.auth_backend.AuthenticationBackend',
+#    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
