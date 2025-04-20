@@ -9,19 +9,15 @@ export default function Login() {
     password: "",
   });
 
-  interface OAuthResponse {
-    url: string;
-  }
-
   const handleOAuthSignIn = async (provider: string): Promise<void> => {
     try {
       const response = await fetch(`/api/auth/${provider}`, {
         method: "GET",
-        credentials: "include", // adjust if your API uses cookies
+        credentials: "include", // ensure cookies are sent
       });
 
       if (response.ok) {
-        const { url }: OAuthResponse = await response.json(); // Expecting { url: "..." } from backend
+        const { url } = await response.json(); 
         window.location.href = url;
       } else {
         console.error(`OAuth login with ${provider} failed`);
@@ -55,10 +51,9 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         alert("Login successful!");
-        // navigate or redirect here if needed
+        // Redirect to appropriate page based on user role (add logic as needed)
       } else {
         const error = await response.json();
-        console.error("Login failed:", error);
         alert(error.message || "Login failed");
       }
     } catch (err) {
@@ -71,12 +66,8 @@ export default function Login() {
     <div className="flex h-screen">
       {/* Left Panel */}
       <div className="w-1/2 bg-gradient-to-b from-[#E7D9FB] to-[#F0E9FF] flex flex-col justify-center items-center">
-        <h1 className="text-5xl font-extrabold text-[#6D4AFF] mb-6 tracking-wide">
-          atlas
-        </h1>
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">
-          Welcome Back!
-        </h2>
+        <h1 className="text-5xl font-extrabold text-[#6D4AFF] mb-6 tracking-wide">atlas</h1>
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">Welcome Back!</h2>
         <p className="text-sm text-gray-700 mb-6 text-center w-3/4">
           Please sign in to continue
         </p>
@@ -87,10 +78,8 @@ export default function Login() {
               key={role}
               onClick={() => setSelectedRole(role)}
               className={`flex items-center justify-between w-full py-3 px-4 rounded-lg font-medium text-sm transform transition-transform duration-200 ease-in-out
-        ${selectedRole === role
-                  ? "bg-[#7864E8] text-white"
-                  : "bg-[#E9E4FF] text-[#7864E8]"}
-        hover:scale-105 hover:shadow-lg active:scale-95`}
+                ${selectedRole === role ? "bg-[#7864E8] text-white" : "bg-[#E9E4FF] text-[#7864E8]"} 
+                hover:scale-105 hover:shadow-lg active:scale-95`}
             >
               <span className="bg-white text-[#7864E8] rounded-full px-2 py-0.5 text-xs font-bold mr-3">
                 {index + 1}
@@ -105,35 +94,23 @@ export default function Login() {
       {/* Right Panel */}
       <div className="w-1/2 flex items-center justify-center bg-white px-8">
         <div className="w-full max-w-md">
-          <h2 className="text-xl font-semibold text-center mb-6 text-black cursor-pointer">
-            Sign In to Your Account
-          </h2>
+          <h2 className="text-xl font-semibold text-center mb-6 text-black">Sign In to Your Account</h2>
 
           {/* OAuth Buttons */}
           <div className="flex justify-center space-x-4 mb-4">
             <button
               onClick={() => handleOAuthSignIn("google")}
-              className="border px-6 py-2 rounded-lg flex items-center space-x-2 text-sm cursor-pointer 
-               transform transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-lg"
+              className="border px-6 py-2 rounded-lg flex items-center space-x-2 text-sm cursor-pointer hover:scale-105 hover:shadow-lg"
             >
-              <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
-                alt="Google"
-                className="w-5 h-5"
-              />
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
               <span className="text-black">Google</span>
             </button>
 
             <button
               onClick={() => handleOAuthSignIn("linkedin")}
-              className="border px-6 py-2 rounded-lg flex items-center space-x-2 text-sm cursor-pointer 
-               transform transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-lg"
+              className="border px-6 py-2 rounded-lg flex items-center space-x-2 text-sm cursor-pointer hover:scale-105 hover:shadow-lg"
             >
-              <img
-                src="https://www.svgrepo.com/show/448234/linkedin.svg"
-                alt="LinkedIn"
-                className="w-5 h-5"
-              />
+              <img src="https://www.svgrepo.com/show/448234/linkedin.svg" alt="LinkedIn" className="w-5 h-5" />
               <span className="text-black">LinkedIn</span>
             </button>
           </div>
@@ -175,9 +152,7 @@ export default function Login() {
 
             <button
               type="submit"
-              className="w-full bg-[#7864E8] text-white py-3 rounded-lg font-semibold mt-4
-             transform transition-transform duration-200 ease-in-out 
-             hover:scale-105 hover:shadow-lg active:scale-95"
+              className="w-full bg-[#7864E8] text-white py-3 rounded-lg font-semibold mt-4 hover:scale-105 hover:shadow-lg active:scale-95"
             >
               Sign In
             </button>
