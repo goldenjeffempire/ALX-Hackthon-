@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+import os
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/users/', include('accounts.urls')),
+    path('api/bookings/', include('bookings.urls')),
+    path('api/notifications/', include('notifications.urls')),
+    path('api/dashboard/', include('dashboard.urls')),
 ]
