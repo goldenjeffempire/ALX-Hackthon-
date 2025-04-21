@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     "users",
+    "bookings",
+    "notifications",
+    "analytics",
+
 ]
 
 MIDDLEWARE = [
@@ -140,3 +144,10 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@atlas.com"
