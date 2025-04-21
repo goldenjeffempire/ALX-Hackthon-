@@ -1,19 +1,16 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-
+from django.urls import path
 from .views import (
-    BookingViewSet, PublicBookedSlotsView,
-    WorkspaceTypeViewSet, WorkspaceViewSet
+    WorkspaceListView,
+    BookingCreateView,
+    BookingListView,
+    BookingDetailView,
+    AvailabilityCheckView,
 )
 
-router = DefaultRouter()
-router.register(r'bookings', BookingViewSet, basename='booking')
-router.register(r'workspace-types', WorkspaceTypeViewSet, basename='workspace-type')
-router.register(r'workspaces', WorkspaceViewSet, basename='workspace')
-
-app_name = 'bookings'
-
 urlpatterns = [
-    path('', include(router.urls)),
-    path('slots/', PublicBookedSlotsView.as_view(), name='public-booked-slots'),
+    path("workspaces/", WorkspaceListView.as_view(), name="workspace-list"),
+    path("bookings/", BookingListView.as_view(), name="user-bookings"),
+    path("bookings/new/", BookingCreateView.as_view(), name="create-booking"),
+    path("bookings/<int:pk>/", BookingDetailView.as_view(), name="booking-detail"),
+    path("availability/", AvailabilityCheckView.as_view(), name="check-availability"),
 ]

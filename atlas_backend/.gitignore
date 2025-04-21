@@ -1,0 +1,11 @@
+# Python
+*.pyc
+__pycache__/
+
+# Env
+.env
+atlas-env/
+
+# Django
+*.sqlite3
+
