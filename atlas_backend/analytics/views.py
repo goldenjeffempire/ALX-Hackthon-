@@ -5,10 +5,10 @@ from django.db.models import Count, Avg, F
 from django.utils.timezone import now, timedelta
 from bookings.models import Booking, Workspace
 from django.db.models.functions import ExtractHour
-
+fromm users.permissions import IsAdmin
 
 class BookingVolumeView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdmin]
 
     def get(self, request):
         last_30_days = now() - timedelta(days=30)

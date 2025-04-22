@@ -65,3 +65,6 @@ class AvailabilityCheckView(APIView):
         ).exists()
 
         return Response({"available": not conflicts}, status=200)
+
+class WorkspaceCreateUpdateView:
+permission_classes = [IsAdmin]
