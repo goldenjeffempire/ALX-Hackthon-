@@ -4,7 +4,8 @@ from .serializers import WorkspaceSerializer, BookingSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.utils.dateparse import parse_datetime
-
+from notifications.tasks import send_booking_reminder
+from datetime import timedelta
 
 class WorkspaceListView(generics.ListAPIView):
     queryset = Workspace.objects.filter(is_active=True)
@@ -17,7 +18,14 @@ class BookingCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        booking = serializer.save(user=self.request.user)
 
+        if booking.user.profile.receive_booking_reminders:
+            reminder_time = booking.start_time - timedelta(minutes=30)
+            send_booking_reminder.apply_async(
+                args=[booking.user.email, booking.workspace.name, booking.start_time.isoformat()],
+                eta=reminder_time,
+            )
 class BookingListView(generics.ListAPIView):
     serializer_class = BookingSerializer
     permission_classes = [permissions.IsAuthenticated]
