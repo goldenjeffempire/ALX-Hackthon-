@@ -4,7 +4,7 @@ from .serializers import WorkspaceSerializer, BookingSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.utils.dateparse import parse_datetime
-from notifications.tasks import send_booking_reminder
+from notifications.tasks import send_booking_reminder, send_booking_update_notifications
 from datetime import timedelta
 
 class WorkspaceListView(generics.ListAPIView):
@@ -39,6 +39,23 @@ class BookingDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Booking.objects.filter(user=self.request.user)
+
+    def perform_update(self, serializer):
+            booking = serializer.save()
+            send_booking_update_notification.delay(
+                booking.user.email,
+                subject="Booking Updated",
+                message=f"Your booking for '{booking.workspace.name}' has been updated. New time: {booking.start_time} - {booking.end_time}"
+            )
+
+        def perform_destroy(self, instance):
+            send_booking_update_notification.delay(
+                instance.user.email,
+                subject="Booking Cancelled",
+                message=f"Your booking for '{instance.workspace.name}' on {instance.start_time} has been cancelled."
+            )
+            instance.status = "CANCELLED"
+            instance.save()
 
 class AvailabilityCheckView(APIView):
     def get(self, request):

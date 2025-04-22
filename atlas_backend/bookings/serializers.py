@@ -20,6 +20,13 @@ class BookingSerializer(serializers.ModelSerializer):
             end_time__gt=data["start_time"],
             status="ACTIVE"
         )
-        if existing.exists():
-            raise serializers.ValidationError("This workspace is already booked for the selected time range.")
-        return data
+    if existing.exists():
+        admin = User.objects.filter(role="ADMIN").first()
+        if admin:
+            send_booking_update_notification.delay(
+                admin.email,
+                subject="Booking Conflict Alert",
+                message=f"A booking conflict was detected for workspace '{data['workspace'].name}' between {data['start_time']} and {data['end_time']}."
+            )
+        raise serializers.ValidationError("This workspace is already booked for the selected time range.")
+
